@@ -1,1 +1,7 @@
-# graph-theoretic-identification-of-PSTH-components
+# Graph-theoretic Identification of PSTH components
+
+This is the accomopanying code for the following paper:
+Burns T & Rajan R (2022) Temporal activity patterns of layer II and IV rat barrel cortex neurons in healthy and injured conditions. Physiological Reports, 10(4):e15155.
+DOI: https://doi.org/10.14814/phy2.15155
+
+The code takes a MATLAB matrix, treats each element in the matric as a vertex of a graph, connects all vertices to its immediate neighbouring elements in the graph horizontally (row-wise), vertically (column-wise), and diagonally (one element `across` row-wise and one element `up` or `down` column-wise). Then, using the value of these elements, we weight the edges incoming to a vertex inversely proportional to the value at that vertex has, e.g., if a vertex represents the maximum firing rate its indegree edge weights will be very small. We then place a `start` and `goal` vertex above and below the top and bottom rows, respectively, which all vertices of the top and bottom rows are connected to with an arbitrary small weight. Then, to calculate the first major component of activity in the PSTH, we calculate the shortest path between the start and goal vertices. To calculate the next major, sperate component, we reweight all edges involved in the previous shortest path to be arbitrarily high, and re-run the shortest path algorithm. This continues for as many components as desired. We then set a threshold for which paths count as `components` based on the accumulated path cost (sum of the edge weights involved in the path, before adjustment).
